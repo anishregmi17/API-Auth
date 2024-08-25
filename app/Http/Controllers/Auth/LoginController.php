@@ -7,13 +7,15 @@ use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\JsonResponse;
+
 
 class LoginController extends Controller
 {
     /**
      * Handle an incoming authentication request.
      */
-    public function store(LoginRequest $request): Response
+    public function store(LoginRequest $request): JsonResponse
     {
         $request->authenticate();
         $user = $request->user;
@@ -25,6 +27,7 @@ class LoginController extends Controller
                 'email' => $user->email
             ]
         ];
+        return response()->json($data, status: 201);
     }
 
     /**
