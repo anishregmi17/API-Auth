@@ -35,6 +35,6 @@ class RegisteredUserController extends Controller
 
         event(new Registered($user));
 
-        return response()->json(['message' => 'User Created', 'User' => $user], status: 201);
+        return response()->json(['message' => 'User Created Sucessfully', 'User' => $user], status: 201);
     }
 }
