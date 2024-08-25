@@ -8,9 +8,10 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\JsonResponse;
+use App\Models\User;
 
 
-class LoginController extends Controller
+class AuthenticatedSessionController extends Controller
 {
     /**
      * Handle an incoming authentication request.
@@ -18,7 +19,8 @@ class LoginController extends Controller
     public function store(LoginRequest $request): JsonResponse
     {
         $request->authenticate();
-        $user = $request->user;
+
+        $user = User::where('email', $request->email)->first();
 
         $data = [
             'token' => $user->createToken("token for" . $user->email)->plainTextToken,
@@ -27,7 +29,7 @@ class LoginController extends Controller
                 'email' => $user->email
             ]
         ];
-        return response()->json($data, status: 201);
+        return response()->json($data, 201);
     }
 
     /**

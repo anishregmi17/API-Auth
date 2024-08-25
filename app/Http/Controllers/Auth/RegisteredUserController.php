@@ -35,16 +35,6 @@ class RegisteredUserController extends Controller
 
         event(new Registered($user));
 
-        // Auth::login($user);
-        // code 1st
-        $data = [
-            'token' => $user->createToken("token for" . $user->email)->plainTextToken,
-            'user' => [
-                'name' => $user->name,
-                'email' => $user->email
-            ]
-        ];
-
-        return response()->json($data, status: 201);
+        return response()->json(['message' => 'User Created', 'User' => $user], status: 201);
     }
 }
