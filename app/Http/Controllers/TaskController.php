@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\TaskResource;
 use App\Models\Task;
 use Illuminate\Http\Request;
 
@@ -40,7 +41,7 @@ class TaskController extends Controller
     public function index()
     {
         // sabai task get garna
-        return Task::all();
+        return Task::paginate(10);
     }
 
     /**
@@ -71,14 +72,18 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
-        // new task create garna
-        $request->validate([
+        $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
         ]);
-        $task = Task::create($request->all());
 
-        return response()->json($task, 201);
+        $task = Task::create($validated);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Task created successfully',
+            'data' => $task
+        ], 201);
     }
 
     /**
@@ -114,7 +119,7 @@ class TaskController extends Controller
         if (!$task) {
             return response()->json(['message' => 'Task not found'], 404);
         }
-        return $task;
+        return new TaskResource($task);
     }
 
     /**
